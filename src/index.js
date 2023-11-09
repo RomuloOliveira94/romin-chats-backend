@@ -15,12 +15,7 @@ app.use((req, res, next) => {
 const server_port = 3001;
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: "https://romin-chats.vercel.app/",
-    methods: ["GET", "POST"]
-  },
-});
+const io = new Server(server);
 
 server.listen(server_port, () => {
   console.log(`Server rodando em localhost:${server_port}`);

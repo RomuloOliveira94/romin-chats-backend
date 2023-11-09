@@ -17,6 +17,10 @@ const io = new Server(server, {
   },
 });
 
+server.listen(server_port, () => {
+  console.log(`Server rodando em localhost:${server_port}`);
+})
+
 io.on("connection", (socket) => {
 
   function getQuantityOfUsers (roomID) {
@@ -49,10 +53,6 @@ io.on("connection", (socket) => {
     getQuantityOfUsers(data.room)
   });
 });
-
-server.listen(server_port, () => {
-  console.log(`Server rodando em localhost:${server_port}`);
-})
 
 
 

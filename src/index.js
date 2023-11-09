@@ -4,7 +4,9 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 const app = express();
 
-app.use(cors());
+app.use(cors({
+	origin: 'https://romin-chats.vercel.app/'
+}));
 
 
 const server_port = 3001;

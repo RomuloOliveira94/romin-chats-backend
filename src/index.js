@@ -1,25 +1,17 @@
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
-const { Server } = require("socket.io");
+const { Server } = require('socket.io');
 const app = express();
+const router = require('./router');
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://romin-chats.vercel.app/");
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-    app.use(cors());
-    next();
-});
+app.use(cors());
+app.use(router);
 
 
-const server_port = 3001;
+const server_port = 5000;
 const server = http.createServer(app);
-
 const io = new Server(server);
-
-server.listen(server_port, () => {
-  console.log(`Server rodando em localhost:${server_port}`);
-})
 
 io.on("connection", (socket) => {
 
@@ -53,6 +45,10 @@ io.on("connection", (socket) => {
     getQuantityOfUsers(data.room)
   });
 });
+
+server.listen(server_port, () => {
+  console.log(`Server rodando em localhost:${server_port}`);
+})
 
 
 

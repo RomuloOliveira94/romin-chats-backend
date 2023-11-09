@@ -1,16 +1,26 @@
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
-const { Server } = require('socket.io');
 const app = express();
 const router = require('./router');
 
 app.use(cors());
+
 app.use(router);
 
 
 const server_port = 5000;
 const server = http.createServer(app);
+
+const { Server } = require('socket.io')(server, {
+  cors: {
+    origin: "https://romin-chats.vercel.app/",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["romin-chats"],
+    credentials: true
+  }
+});
+
 const io = new Server(server);
 
 io.on("connection", (socket) => {

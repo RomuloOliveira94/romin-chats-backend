@@ -4,7 +4,9 @@ const cors = require("cors");
 const app = express();
 const router = require('./router');
 
-app.use(cors());
+app.use(cors({
+	origin: 'https://romin-chats.vercel.app/'
+}));
 
 app.use(router);
 
@@ -15,7 +17,8 @@ const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: "https://romin-chats.vercel.app/",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true   
   }
 });
 

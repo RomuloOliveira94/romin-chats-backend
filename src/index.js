@@ -12,16 +12,12 @@ app.use(router);
 const server_port = 5000;
 const server = http.createServer(app);
 
-const { Server } = require('socket.io')(server, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "https://romin-chats.vercel.app/",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["romin-chats"],
-    credentials: true
+    methods: ["GET", "POST"]
   }
 });
-
-const io = new Server(server);
 
 io.on("connection", (socket) => {
 

@@ -4,22 +4,20 @@ const cors = require("cors");
 const router = require("./router");
 const { Server } = require("socket.io");
 const app = express();
-app.use(cors(), {
-  origin: "http://localhost:5173/",
-  credentials: true,
-});
+app.use(cors());
 app.use(router);
-aap.set("port", process.env.PORT || 5000);
+app.set("port", process.env.PORT || 5000);
 
 const server_port = 5000;
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: ["http://localhost:5173", "https://romin-chats.vercel.app/"],
   },
 });
 
+let rooms = {};
 io.on("connection", (socket) => {
   function getQuantityOfUsers(roomID) {
     const room = io.sockets.adapter.rooms.get(roomID);
@@ -35,8 +33,10 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (data) => {
     socket.join(data.room);
+    rooms[data.room] = io.sockets.adapter.rooms.get(data.room);
+    socket.emit("userQuantity", rooms[data.room].size);
+    socket.to(data.room).emit("userQuantity", rooms[data.room].size);
     socket.to(data.room).emit("receive_message", data);
-    getQuantityOfUsers(data.room);
     console.log(`User: ${socket.id}, entrou na sala ${data.room}`);
   });
 
@@ -48,7 +48,9 @@ io.on("connection", (socket) => {
     socket.leave(data.room);
     console.log(`User: ${socket.id}, saiu da sala ${data.room}`);
     socket.to(data.room).emit("receive_message", data);
-    getQuantityOfUsers(data.room);
+    socket.emit("userQuantity", rooms[data.room].size);
+    socket.to(data.room).emit("userQuantity", rooms[data.room].size);
+    rooms[data.room] = io.sockets.adapter.rooms.get(data.room);
   });
 });
 

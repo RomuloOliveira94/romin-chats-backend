@@ -8,6 +8,7 @@
     "socket.io": "^4.7.2"
   },
   "scripts": {
-    "serve": "node ./src/index.js"
+    "serve": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   }
 }
